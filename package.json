@@ -1,6 +1,6 @@
 {
   "name": "@profullstack/enhanced-router",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Enhanced SPA router with transition management, i18n integration, and layout management",
   "type": "module",
   "main": "dist/index.js",
