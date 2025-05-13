@@ -82,6 +82,9 @@ export function createI18nIntegration(options = {}) {
       translateDOM();
       applyRTL();
     });
+    
+    // Return true to indicate initialization was performed
+    return true;
   }
   
   /**
@@ -94,8 +97,15 @@ export function createI18nIntegration(options = {}) {
     
     if (config.translateContainer) {
       config.translateContainer(document.body);
-    } else if (config.localizer && typeof config.localizer.translateDOM === 'function') {
-      config.localizer.translateDOM();
+    } else if (config.localizer) {
+      // Check if localizer has translateDOM method
+      if (typeof config.localizer.translateDOM === 'function') {
+        config.localizer.translateDOM();
+      }
+      // Check if localizer has translateContainer method as fallback
+      else if (typeof config.localizer.translateContainer === 'function') {
+        config.localizer.translateContainer(document.body);
+      }
     }
   }
   

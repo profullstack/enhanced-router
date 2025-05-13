@@ -44,6 +44,15 @@ class EnhancedRouter {
     // Create layout manager
     this.layouts = createLayoutManager(layouts);
     
+    // Register any custom layouts passed in the options
+    if (layouts && typeof layouts === 'object') {
+      Object.entries(layouts).forEach(([name, layoutFn]) => {
+        if (typeof layoutFn === 'function') {
+          this.layouts.registerLayout(name, layoutFn);
+        }
+      });
+    }
+    
     // Create i18n integration
     this.i18n = createI18nIntegration(i18n);
     
