@@ -79,13 +79,16 @@ export function createTransitions(options = {}) {
         // If no fromEl (initial load), just show toEl
         if (!fromEl) {
           if (toEl) {
-            toEl.style.opacity = '0';
-            toEl.style.transition = `opacity ${config.duration}ms ${config.easing}`;
-            
-            // Force reflow
-            void toEl.offsetWidth;
-            
-            toEl.style.opacity = '1';
+            // Check if toEl exists and has a style property
+            if (toEl.style) {
+              toEl.style.opacity = '0';
+              toEl.style.transition = `opacity ${config.duration}ms ${config.easing}`;
+              
+              // Force reflow
+              void toEl.offsetWidth;
+              
+              toEl.style.opacity = '1';
+            }
           }
           
           setTimeout(() => {
@@ -99,9 +102,11 @@ export function createTransitions(options = {}) {
           return;
         }
         
-        // Fade out fromEl
-        fromEl.style.transition = `opacity ${config.duration}ms ${config.easing}`;
-        fromEl.style.opacity = '0';
+        // Fade out fromEl if it exists
+        if (fromEl && fromEl.style) {
+          fromEl.style.transition = `opacity ${config.duration}ms ${config.easing}`;
+          fromEl.style.opacity = '0';
+        }
         
         setTimeout(() => {
           // Remove fromEl
@@ -110,7 +115,7 @@ export function createTransitions(options = {}) {
           }
           
           // Prepare toEl
-          if (toEl) {
+          if (toEl && toEl.style) {
             toEl.style.opacity = '0';
             toEl.style.transition = `opacity ${config.duration}ms ${config.easing}`;
             
@@ -177,20 +182,24 @@ export function createTransitions(options = {}) {
           return;
         }
         
-        // Prepare container
-        const container = fromEl.parentNode;
-        container.style.position = 'relative';
-        container.style.overflow = 'hidden';
+        // Prepare container if fromEl exists and has a parent
+        const container = fromEl ? fromEl.parentNode : null;
+        if (container && container.style) {
+          container.style.position = 'relative';
+          container.style.overflow = 'hidden';
+        }
         
-        // Prepare fromEl
-        fromEl.style.position = 'absolute';
-        fromEl.style.top = '0';
-        fromEl.style.left = '0';
-        fromEl.style.width = '100%';
-        fromEl.style.transition = `transform ${config.duration}ms ${config.easing}`;
+        // Prepare fromEl if it exists
+        if (fromEl && fromEl.style) {
+          fromEl.style.position = 'absolute';
+          fromEl.style.top = '0';
+          fromEl.style.left = '0';
+          fromEl.style.width = '100%';
+          fromEl.style.transition = `transform ${config.duration}ms ${config.easing}`;
+        }
         
-        // Prepare toEl
-        if (toEl) {
+        // Prepare toEl if it exists
+        if (toEl && toEl.style) {
           toEl.style.position = 'absolute';
           toEl.style.top = '0';
           toEl.style.left = '0';
@@ -198,25 +207,29 @@ export function createTransitions(options = {}) {
           toEl.style.transform = 'translateX(100%)';
           toEl.style.transition = `transform ${config.duration}ms ${config.easing}`;
           
-          // Add to container
-          container.appendChild(toEl);
+          // Add to container if container exists
+          if (container) {
+            container.appendChild(toEl);
+          }
         }
         
-        // Force reflow
-        void fromEl.offsetWidth;
-        void toEl.offsetWidth;
+        // Force reflow if elements exist
+        if (fromEl) void fromEl.offsetWidth;
+        if (toEl) void toEl.offsetWidth;
         
-        // Slide fromEl out to the left
-        fromEl.style.transform = 'translateX(-100%)';
+        // Slide fromEl out to the left if it exists
+        if (fromEl && fromEl.style) {
+          fromEl.style.transform = 'translateX(-100%)';
+        }
         
-        // Slide toEl in from the right
-        if (toEl) {
+        // Slide toEl in from the right if it exists
+        if (toEl && toEl.style) {
           toEl.style.transform = 'translateX(0)';
         }
         
         setTimeout(() => {
-          // Reset styles
-          if (container) {
+          // Reset styles if container exists and has style
+          if (container && container.style) {
             container.style.position = '';
             container.style.overflow = '';
           }
@@ -226,8 +239,8 @@ export function createTransitions(options = {}) {
             fromEl.parentNode.removeChild(fromEl);
           }
           
-          // Reset toEl styles
-          if (toEl) {
+          // Reset toEl styles if it exists and has style
+          if (toEl && toEl.style) {
             toEl.style.position = '';
             toEl.style.top = '';
             toEl.style.left = '';
